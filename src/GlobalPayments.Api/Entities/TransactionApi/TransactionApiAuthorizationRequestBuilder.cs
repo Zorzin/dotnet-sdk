@@ -75,9 +75,9 @@ namespace GlobalPayments.Api.Entities {
             }
 
             var paymentData = new JsonDoc()
-                .Set("amount", builder.Amount.ToString())
+                .Set("amount", builder.Amount.ToCurrencyString())
                 .Set("currency_code", builder.Currency)
-                .Set("gratuity_amount", builder?.Gratuity)
+                .Set("gratuity_amount", builder?.Gratuity.ToCurrencyString())
                 .Set("invoice_number", builder.InvoiceNumber);
             doc.Set("payment", paymentData);
 

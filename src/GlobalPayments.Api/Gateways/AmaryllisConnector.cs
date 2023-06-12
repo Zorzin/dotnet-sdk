@@ -27,7 +27,7 @@ namespace GlobalPayments.Api.Gateways {
 
             // Allow DUp
             // Allow Partial Auth
-            et.SubElement(request, "Amount", builder.Amount);
+            et.SubElement(request, "Amount", builder.Amount.ToCurrencyString());
             // Gratuity
             // Convinience Amount
             // Shipping Amount

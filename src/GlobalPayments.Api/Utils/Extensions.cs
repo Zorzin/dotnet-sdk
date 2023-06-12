@@ -35,9 +35,13 @@ namespace GlobalPayments.Api.Utils {
 
         public static string ToCurrencyString(this decimal? dec) {
             if (dec != null) {
-                return Regex.Replace(string.Format("{0:c}", dec), "[^0-9.,]", "");
+                return dec.ToCurrencyString();
             }
             return null;
+        }
+        
+        public static string ToCurrencyString(this decimal dec) {
+            return Regex.Replace(string.Format("{0:c}", dec), "[^0-9.,]", "");
         }
 
         public static decimal? ToAmount(this string str) {

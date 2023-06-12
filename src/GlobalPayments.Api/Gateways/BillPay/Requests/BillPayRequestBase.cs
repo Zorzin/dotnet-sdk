@@ -43,8 +43,8 @@ namespace GlobalPayments.Api.Gateways.BillPay {
         protected void BuildACHAccount(Element parent, eCheck eCheck, decimal amountToCharge, decimal? feeAmount) {
             var achAccounts = et.SubElement(parent, "bdms:ACHAccountsToCharge");
             var achAccount = et.SubElement(achAccounts, "bdms:ACHAccountToCharge");
-            et.SubElement(achAccount, "bdms:Amount", amountToCharge);
-            et.SubElement(achAccount, "bdms:ExpectedFeeAmount", feeAmount ?? 0M);
+            et.SubElement(achAccount, "bdms:Amount", amountToCharge.ToCurrencyString());
+            et.SubElement(achAccount, "bdms:ExpectedFeeAmount", feeAmount != null ? feeAmount.ToCurrencyString() : 0M.ToCurrencyString());
             // PLACEHOLDER: ACHReturnEmailAddress
             et.SubElement(achAccount, "bdms:ACHStandardEntryClass", eCheck.SecCode);
             et.SubElement(achAccount, "bdms:AccountNumber", eCheck.AccountNumber);
@@ -68,8 +68,8 @@ namespace GlobalPayments.Api.Gateways.BillPay {
         /// <param name="feeAmount"></param>
         protected void BuildQuickPayACHAccount(Element parent, eCheck eCheck, decimal amountToCharge, decimal? feeAmount) {
             var achAccount = et.SubElement(parent, "bdms:QuickPayACHAccountToCharge");
-            et.SubElement(achAccount, "bdms:Amount", amountToCharge);
-            et.SubElement(achAccount, "bdms:ExpectedFeeAmount", feeAmount ?? 0M);
+            et.SubElement(achAccount, "bdms:Amount", amountToCharge.ToCurrencyString());
+            et.SubElement(achAccount, "bdms:ExpectedFeeAmount", feeAmount != null ? feeAmount.ToCurrencyString() : 0M.ToCurrencyString());
             // PLACEHOLDER: ACHReturnEmailAddress
             et.SubElement(achAccount, "bdms:ACHStandardEntryClass", eCheck.SecCode);
             et.SubElement(achAccount, "bdms:AccountNumber", eCheck.AccountNumber);
@@ -115,9 +115,9 @@ namespace GlobalPayments.Api.Gateways.BillPay {
 
             var clearTextCards = et.SubElement(parent, "bdms:ClearTextCreditCardsToCharge");
             var clearTextCard = et.SubElement(clearTextCards, "bdms:ClearTextCardToCharge");
-            et.SubElement(clearTextCard, "bdms:Amount", amountToCharge);
+            et.SubElement(clearTextCard, "bdms:Amount", amountToCharge.ToCurrencyString());
             et.SubElement(clearTextCard, "bdms:CardProcessingMethod", "Credit");
-            et.SubElement(clearTextCard, "bdms:ExpectedFeeAmount", feeAmount ?? 0);
+            et.SubElement(clearTextCard, "bdms:ExpectedFeeAmount", feeAmount != null ? feeAmount.ToCurrencyString() : 0M.ToCurrencyString());
 
             var clearTextCredit = et.SubElement(clearTextCard, "bdms:ClearTextCreditCard");
 
@@ -143,9 +143,9 @@ namespace GlobalPayments.Api.Gateways.BillPay {
         /// <param name="amountToCharge"></param>
         protected void BuildQuickPayCardToCharge(Element parent, CreditCardData card, decimal amountToCharge, decimal? feeAmount, Address address) {
             var cardToCharge = et.SubElement(parent, "bdms:QuickPayCardToCharge");
-            et.SubElement(cardToCharge, "bdms:Amount", amountToCharge);
+            et.SubElement(cardToCharge, "bdms:Amount", amountToCharge.ToCurrencyString());
             et.SubElement(cardToCharge, "bdms:CardProcessingMethod", "Credit");
-            et.SubElement(cardToCharge, "bdms:ExpectedFeeAmount", feeAmount ?? 0);
+            et.SubElement(cardToCharge, "bdms:ExpectedFeeAmount", feeAmount != null ? feeAmount.ToCurrencyString() : 0M.ToCurrencyString());
 
             var cardHolder = et.SubElement(cardToCharge, "pos:CardHolderData");
             BuildAccountHolderData(cardHolder,
@@ -184,9 +184,9 @@ namespace GlobalPayments.Api.Gateways.BillPay {
             var tokensToCharge = et.SubElement(parent, "bdms:TokensToCharge");
             var tokenToCharge = et.SubElement(tokensToCharge, "bdms:TokenToCharge");
 
-            et.SubElement(tokenToCharge, "bdms:Amount", amount);
+            et.SubElement(tokenToCharge, "bdms:Amount", amount.ToCurrencyString());
             et.SubElement(tokenToCharge, "bdms:CardProcessingMethod", GetCardProcessingMethod(paymentMethod.PaymentMethodType));
-            et.SubElement(tokenToCharge, "bdms:ExpectedFeeAmount", feeAmount);
+            et.SubElement(tokenToCharge, "bdms:ExpectedFeeAmount", feeAmount != null ? feeAmount.ToCurrencyString() : 0M.ToCurrencyString());
             if (paymentMethod is eCheck ach) {
                 et.SubElement(tokenToCharge, "bdms:ACHStandardEntryClass", ach.SecCode);
             }
@@ -199,8 +199,8 @@ namespace GlobalPayments.Api.Gateways.BillPay {
         /// <param name="parent"></param>
         protected void BuildTransaction(Element parent, AuthorizationBuilder builder) {
             var transaction = et.SubElement(parent, "bdms:Transaction");
-            et.SubElement(transaction, "bdms:Amount", builder.Amount);
-            et.SubElement(transaction, "bdms:FeeAmount", builder.ConvenienceAmount);
+            et.SubElement(transaction, "bdms:Amount", builder.Amount.ToCurrencyString());
+            et.SubElement(transaction, "bdms:FeeAmount", builder.ConvenienceAmount.ToCurrencyString());
             et.SubElement(transaction, "bdms:MerchantInvoiceNumber", builder.InvoiceNumber);
             et.SubElement(transaction, "bdms:MerchantTransactionDescription", builder.Description);
             et.SubElement(transaction, "bdms:MerchantTransactionID", builder.ClientTransactionId);

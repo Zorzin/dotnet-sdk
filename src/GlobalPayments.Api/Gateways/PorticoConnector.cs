@@ -42,11 +42,11 @@ namespace GlobalPayments.Api.Gateways {
                         et.SubElement(block1, "AllowPartialAuth", builder.AllowPartialAuth ? "Y" : "N");
                 }
             }
-            et.SubElement(block1, "Amt", builder.Amount);
-            et.SubElement(block1, "GratuityAmtInfo", builder.Gratuity);
-            et.SubElement(block1, "ConvenienceAmtInfo", builder.ConvenienceAmount);
-            et.SubElement(block1, "ShippingAmtInfo", builder.ShippingAmt);
-            et.SubElement(block1, "SurchargeAmtInfo", builder.SurchargeAmount);
+            et.SubElement(block1, "Amt", builder.Amount.ToCurrencyString());
+            et.SubElement(block1, "GratuityAmtInfo", builder.Gratuity.ToCurrencyString());
+            et.SubElement(block1, "ConvenienceAmtInfo", builder.ConvenienceAmount.ToCurrencyString());
+            et.SubElement(block1, "ShippingAmtInfo", builder.ShippingAmt.ToCurrencyString());
+            et.SubElement(block1, "SurchargeAmtInfo", builder.SurchargeAmount.ToCurrencyString());
             // because plano...
             et.SubElement(block1, builder.PaymentMethod.PaymentMethodType == PaymentMethodType.Debit ? "CashbackAmtInfo" : "CashBackAmount", builder.CashBackAmount);
 
